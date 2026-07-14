@@ -10,3 +10,7 @@ Route::get('/', function () {
 Route::get('/busho', [BushoController::class, 'index'])->name('busho.index');
 Route::get('/busho/sakusei', [BushoController::class, 'sakusei'])->name('busho.sakusei');
 Route::post('/busho/hozon', [BushoController::class, 'hozon'])->name('busho.hozon');
+
+Route::get('/busho/edit/{id}', [BushoController::class, 'edit'])->name('busho.edit');
+Route::put('/busho/update/{id}', [BushoController::class, 'update'])->name('busho.update');
+Route::delete('/busho/delete/{id}', [BushoController::class, 'delete'])->name('busho.delete');

@@ -11,6 +11,8 @@ class Busho extends Model
 {
     //all()メソッドを使用して、部署一覧を取得するためのモデル
     protected $table = 'busho'; // テーブル名を指定
+    // 主キーを指定
+    protected $primaryKey = 'busho_id';
 
     protected $fillable = [
         'busho_mei', // 部署名

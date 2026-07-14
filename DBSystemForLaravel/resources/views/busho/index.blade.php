@@ -13,6 +13,7 @@
             <tr>
                 <th>ID</th>
                 <th>部署名</th>
+                <th>操作</th>
             </tr>
         </thead>
         <tbody>
@@ -20,6 +21,14 @@
                 <tr>
                     <td>{{ $busho->busho_id }}</td>
                     <td>{{ $busho->busho_mei }}</td>
+                    <td>
+                        <a href="{{ route('busho.edit', ['id' => $busho->busho_id]) }}">編集</a>
+                        <form action="{{ route('busho.delete', ['id' => $busho->busho_id]) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" onclick="return confirm('本当に削除しますか？')">削除</button>
+                        </form>
+                    </td>
                 </tr>
             @endforeach
         </tbody>

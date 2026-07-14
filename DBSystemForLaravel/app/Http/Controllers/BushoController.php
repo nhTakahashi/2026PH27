@@ -39,4 +39,30 @@ class BushoController extends Controller
         //部署一覧にリダイレクト
         return redirect()->route('busho.index');
     }
+
+    //部署編集メソッドを追加
+    public function edit(int $id)
+    {
+        //部署を取得
+        $busho = Busho::findOrFail($id);
+        //ビューに渡す
+        return view('busho.edit', ['busho' => $busho]);
+    }
+
+    //部署更新メソッドを追加
+    public function update(Request $request, int $id)
+    {
+        //バリデーション
+        $request->validate([
+            //部署名は「必須」で「文字列」、「最大255文字」
+            'busho_mei' => 'required|string|max:255',
+        ]);
+        //部署を取得
+        $busho = Busho::findOrFail($id);
+        //部署を更新
+        $busho->update($request->all());
+
+        //部署一覧にリダイレクト
+        return redirect()->route('busho.index');
+    }
 }
