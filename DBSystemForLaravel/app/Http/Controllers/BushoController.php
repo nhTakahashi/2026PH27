@@ -65,4 +65,15 @@ class BushoController extends Controller
         //部署一覧にリダイレクト
         return redirect()->route('busho.index');
     }
+
+    //部署削除メソッドを追加
+    public function delete(int $id)
+    {
+        //部署を取得
+        $busho = Busho::findOrFail($id);
+        //部署を削除
+        $busho->delete();
+        //部署一覧にリダイレクト
+        return redirect()->route('busho.index');
+    }
 }
