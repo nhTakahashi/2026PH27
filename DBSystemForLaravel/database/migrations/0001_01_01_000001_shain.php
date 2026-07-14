@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string("yakushoku", 30)->nullable();   // 役職
             $table->date("nyusha_bi")->nullable();         // 入社日
             $table->integer("kyuyo")->nullable();          // 給与
+            $table->timestamps();                          // created_at, updated_at
         });
     }
 
