@@ -13,6 +13,7 @@
         <label for="busho_mei">部署名:</label>
         <input type="text" id="busho_mei" name="busho_mei" value="{{ $busho->busho_mei }}" required>
         <button type="submit">更新</button>
+        <p><a href="{{ route('busho.index') }}">部署一覧に戻る</a></p>
     </form>
 </body>
 </html>
