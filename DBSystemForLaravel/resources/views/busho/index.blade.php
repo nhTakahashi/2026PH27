@@ -7,12 +7,26 @@
 </head>
 <body>
     <h1>部署一覧</h1>
-    <p><a href="{{ route('busho.sakusei') }}">新規登録</a></p>
+    <nav>
+        <a href="{{ route('busho.sakusei') }}">部署を新規登録</a> |
+        <a href="{{ route('shain.index') }}">社員一覧</a>
+        <form action="{{ route('logout') }}" method="POST" style="display:inline;">
+            @csrf
+            <button type="submit">ログアウト</button>
+        </form>
+    </nav>
+    @if (session('success'))
+        <p style="color: green;">{{ session('success') }}</p>
+    @endif
+    @if (session('error'))
+        <p style="color: red;">{{ session('error') }}</p>
+    @endif
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>
             <tr>
                 <th>ID</th>
                 <th>部署名</th>
+                <th>社員数</th>
                 <th>操作</th>
             </tr>
         </thead>
@@ -20,7 +34,8 @@
             @foreach ($bushoList as $busho)
                 <tr>
                     <td>{{ $busho->busho_id }}</td>
-                    <td>{{ $busho->busho_mei }}</td>
+                    <td><a href="{{ route('shain.index', ['busho_id' => $busho->busho_id]) }}">{{ $busho->busho_mei }}</a></td>
+                    <td>{{ $busho->shain_count }}</td>
                     <td>
                         <a href="{{ route('busho.edit', ['id' => $busho->busho_id]) }}">編集</a>
                         <form action="{{ route('busho.delete', ['id' => $busho->busho_id]) }}" method="POST" style="display:inline;">

@@ -11,13 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('busho', function (Blueprint $table) {
-            $table->timestamps();
-        });
-
-        Schema::table('shain', function (Blueprint $table) {
-            $table->timestamps();
-        });
+        // 初期マイグレーションでtimestampsを作成済みのため、追加処理は不要です。
     }
 
     /**
@@ -25,12 +19,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('shain', function (Blueprint $table) {
-            $table->dropTimestamps();
-        });
-
-        Schema::table('busho', function (Blueprint $table) {
-            $table->dropTimestamps();
-        });
+        // 初期マイグレーションが所有する列のため、削除しません。
     }
 };

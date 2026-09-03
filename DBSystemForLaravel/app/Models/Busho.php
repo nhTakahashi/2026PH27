@@ -9,28 +9,20 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Busho extends Model
 {
-    /**
-     * Eloquent（エロクアント）は、
-     * Laravelに標準搭載されている強力なORM（オブジェクトリレーショナルマッパー）です。
-     * Eloquentを使用することで、データベースの操作を簡単に行うことができます。
-     */
+    // Laravelの複数形の自動推測を使わず、実際のテーブル名を指定します。
+    protected $table = 'busho';
 
-    //all()メソッドを使用して、部署一覧を取得するためのモデル
-    protected $table = 'busho'; // テーブル名を指定
-    // 主キーを指定
+    // 主キーが標準のidではないため、部署IDの列名を指定します。
     protected $primaryKey = 'busho_id';
-    // created_atとupdated_atの自動管理を無効化
-    public $timestamps = false;
 
-    // 変更可能なカラムを指定
-    // fillableプロパティを使用して、変更可能なカラムを指定
+    // create()やupdate()で代入できる列を限定します。
     protected $fillable = [
-        'busho_mei', // 部署名
+        'busho_mei',
     ];
-    // 全件取得するメソッド
-    public static function getAllBusho()
+
+    // 1つの部署には複数の社員が所属するため、hasManyリレーションを定義します。
+    public function shain()
     {
-        // Eloquent(エロクアント)のall()メソッドを使用して、部署一覧を取得
-        return self::all();
+        return $this->hasMany(Shain::class, 'busho_id', 'busho_id');
     }
 }

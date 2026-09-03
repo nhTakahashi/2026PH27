@@ -9,71 +9,73 @@ use App\Models\Busho;
  */
 class BushoController extends Controller
 {
-    //indexメソッドを追加
+    // 部署一覧を表示します。
     public function index()
     {
-        //部署一覧を取得
-        $bushoList = Busho::all();
-        //ビューに渡す
+        // withCount()で、各部署に所属する社員数も同時に取得します。
+        $bushoList = Busho::withCount('shain')->orderBy('busho_id')->get();
+
+        // 取得した部署一覧をBladeテンプレートに渡します。
         return view('busho.index', ['bushoList' => $bushoList]);
     }
 
-    //部署新規登録メソッドを追加
+    // 部署の新規登録フォームを表示します。
     public function sakusei()
     {
-        //ビューに渡す
         return view('busho.sakusei');
     }
 
-    //部署保存メソッドを追加
+    // フォームから送られた部署を保存します。
     public function hozon(Request $request)
     {
-        //バリデーション
+        // 空欄や長すぎる部署名を保存しないために入力内容を検証します。
         $request->validate([
-            //部署名は「必須」で「文字列」、「最大255文字」
             'busho_mei' => 'required|string|max:255',
         ]);
-        //部署を保存
-        Busho::create($request->all());
 
-        //部署一覧にリダイレクト
-        return redirect()->route('busho.index');
+        // only()で、登録を許可した部署名だけを取り出して保存します。
+        Busho::create($request->only('busho_mei'));
+
+        // 一覧画面へ戻り、処理完了メッセージを一度だけ表示します。
+        return redirect()->route('busho.index')->with('success', '部署を登録しました。');
     }
 
-    //部署編集メソッドを追加
+    // 指定された部署の編集フォームを表示します。
     public function edit(int $id)
     {
-        //部署を取得
+        // findOrFail()は対象IDが存在しない場合に404エラーを返します。
         $busho = Busho::findOrFail($id);
-        //ビューに渡す
+
         return view('busho.edit', ['busho' => $busho]);
     }
 
-    //部署更新メソッドを追加
+    // 指定された部署情報を更新します。
     public function update(Request $request, int $id)
     {
-        //バリデーション
         $request->validate([
-            //部署名は「必須」で「文字列」、「最大255文字」
             'busho_mei' => 'required|string|max:255',
         ]);
-        //部署を取得
-        $busho = Busho::findOrFail($id);
-        //部署を更新
-        $busho->update($request->all());
 
-        //部署一覧にリダイレクト
-        return redirect()->route('busho.index');
+        $busho = Busho::findOrFail($id);
+
+        // リクエスト全体ではなく、更新を許可した部署名だけを反映します。
+        $busho->update($request->only('busho_mei'));
+
+        return redirect()->route('busho.index')->with('success', '部署情報を更新しました。');
     }
 
-    //部署削除メソッドを追加
+    // 指定された部署を削除します。
     public function delete(int $id)
     {
-        //部署を取得
         $busho = Busho::findOrFail($id);
-        //部署を削除
+
+        // 所属社員がいると外部キー制約により削除できないため、先に確認します。
+        if ($busho->shain()->exists()) {
+            return redirect()->route('busho.index')->with('error', '所属社員がいる部署は削除できません。');
+        }
+
+        // 社員がいない部署だけを削除します。
         $busho->delete();
-        //部署一覧にリダイレクト
-        return redirect()->route('busho.index');
+        return redirect()->route('busho.index')->with('success', '部署を削除しました。');
     }
 }
